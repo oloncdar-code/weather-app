@@ -1,0 +1,61 @@
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: system-ui;
+}
+.card {
+  background: #f0f4f8;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.weather-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.temp {
+  font-size: 2rem;
+  font-weight: bold;
+}
+.desc {
+  text-transform: capitalize;
+}
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+.favorite-item {
+  position: relative;
+}
+.remove-btn {
+  margin-top: 8px;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+.add-form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.add-form input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+.add-form button {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
