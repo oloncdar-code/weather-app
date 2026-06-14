@@ -1,16 +1,109 @@
-# React + Vite
+markdown
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# Погодное приложение (React + Vite + Express + Яндекс.Погода)
 
-Currently, two official plugins are available:
+Приложение показывает текущую погоду по геолокации, позволяет добавлять города в избранное, удалять их, а также переключать тему (светлая/тёмная). Данные сохраняются в `localStorage`.  
+Реализованы кастомные хуки (`useGeolocation`, `useWeather`, `useLocalStorage`), покрытые тестами.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🚀 Запуск проекта
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Требования
 
-## Expanding the ESLint configuration
+- Node.js 18+ (проверьте: `node -v`)
+- npm 9+ (проверьте: `npm -v`)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 1. Клонирование репозитория
+
+```bash
+git clone https://github.com/oloncdar-code/weather-app.git
+cd weather-app
+
+### 2. Установка зависимостей
+bash
+npm install
+
+### 3. Настройка API-ключа Яндекс.Погоды
+Зарегистрируйтесь и получите ключ на странице API Яндекс.Погоды
+
+Создайте в корне проекта файл .env со строкой:
+
+text
+YANDEX_WEATHER_API_KEY=ваш_ключ
+(Для тестирования можно использовать публичный ключ bb8f64b2-4b83-4cb6-bfc6-397d45ee3d2c. Действителен до 22.06.2026)
+
+### 4. Запуск в режиме разработки
+bash
+npm run dev
+Откройте браузер по адресу http://localhost:5173
+
+Важно: dev-сервер запускает одновременно Vite (фронтенд) и Express (прокси-сервер) на порту 5000. Прокси нужен для скрытия API-ключа.
+
+### 5. Запуск тестов
+bash
+npm run test
+
+### 6. Сборка продакшен-версии
+bash
+npm run build
+Собранные файлы появятся в папке dist/.
+
+### 7. Запуск собранного приложения (с прокси-сервером)
+bash
+npm run preview
+Откройте http://localhost:5000 – сервер будет отдавать статику из dist/ и обрабатывать запросы погоды.
+
+### Структура
+weather-app/
+├── server/               # Прокси-сервер Express (скрывает API-ключ)
+│   └── index.js
+├── src/
+│   ├── components/       # React-компоненты
+│   ├── hooks/            # Кастомные хуки
+│   ├── test/             # Настройка тестового окружения
+│   ├── App.jsx
+│   ├── App.css
+│   └── main.jsx
+├── index.html
+├── package.json
+├── vite.config.js        # Прокси для /api на localhost:5000
+├── vitest.config.js
+├── .env                  # Файл с API-ключом (игнорируется Git)
+└── README.md
+
+### Технологии и подходы
+React 18 (функциональные компоненты, хуки)
+
+Vite – сборка и dev-сервер
+
+Express – прокси-сервер для API Яндекс.Погоды (CORS, безопасность)
+
+Axios – запросы к API
+
+Vitest + React Testing Library – тесты хуков и компонентов
+
+LocalStorage – сохранение избранных городов и темы
+
+Кастомные хуки:
+
+useGeolocation – получение координат
+
+useWeather – запрос погоды (с поддержкой отмены)
+
+useLocalStorage – синхронизация с localStorage
+
+### Возможные проблемы и решения
+Пустая страница / погода не загружается
+Проверьте, что сервер Express запущен (node server/index.js) и порт 5000 не занят. В dev-режиме это делает concurrently.
+Также проверьте вкладку Network в браузере – должны быть запросы к /api/weather.
+
+Ошибка 403 при запросе погоды
+API-ключ неверный или истёк. Создайте новый ключ на Яндекс.Погоде и обновите .env.
+
+Геолокация не работает
+Разрешите доступ к местоположению в браузере. Если не появляется запрос, откройте настройки сайта и разрешите вручную.
+
+Тесты не проходят
+Убедитесь, что все зависимости установлены (npm install). Запустите npm run test ещё раз.
+```
